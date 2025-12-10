@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISOLA | Organic Gelato & Donuts Okinawa</title>
+    
+    <!-- 🚀 パフォーマンス対策: 1枚目のスライド画像を優先的に読み込む設定 (JPEG) -->
+    <link rel="preload" as="image" href="slide_01.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        isola: {
+                            teal: '#246C7A',
+                            yellow: '#FFC800',
+                            pink: '#FF4081',
+                            orange: '#FF9800',
+                            sunset: '#FF7043',
+                            blue: '#4FC3F7',
+                            text: '#2D3748',
+                        },
+                    },
+                    fontFamily: {
+                        heading: ['Cormorant Garamond', 'serif'],
+                        body: ['Montserrat', 'Noto Sans JP', 'sans-serif'],
+                        hand: ['Caveat', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slideshow': 'slideshow 24s infinite',
+                        'blob': 'blob 10s infinite',
+                        'fade-up': 'fadeUp 1.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        slideshow: {
+                            '0%': { opacity: 0, transform: 'scale(1)' },
+                            '4%': { opacity: 1 },
+                            '25%': { opacity: 1 },
+                            '29%': { opacity: 0 },
+                            '100%': { opacity: 0, transform: 'scale(1.1)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -30px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFCF8;
+            color: #2D3748;
+            font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .slide-item {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            z-index: 0;
+            backface-visibility: hidden; 
+        }
+
+        .text-shadow-sm { text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+        .text-shadow-md { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        
+        #image-modal {
+            background-color: rgba(0, 0, 0, 0.85); 
+            z-index: 9999;
+        }
+        .zoom-icon {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .group:hover .zoom-icon {
+            opacity: 1;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #246C7A; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF9800; 
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header id="header" class="fixed w-full top-0 z-[60] transition-all duration-500">
+        <div id="header-bg" class="absolute inset-0 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm transition-colors duration-300"></div>
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center relative">
+            <a href="#" class="relative z-50 hover:scale-105 transition transform flex items-center gap-2 group no-underline">
+                <!-- ロゴ: logo-text.png -->
+                <img src="logo-text.png" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex'" alt="ISOLA" class="h-8 md:h-10 object-contain">
+                <div class="hidden flex-col" style="display:none">
+                    <span class="font-heading text-2xl md:text-3xl font-bold tracking-[0.2em] text-isola-teal leading-none">ISOLA</span>
+                    <span class="font-body text-[0.6rem] tracking-widest text-isola-orange font-bold">OKINAWA</span>
+                </div>
+            </a>
+            <nav class="hidden md:flex space-x-10 items-center">
+                <a href="#concept" class="font-heading text-lg text-isola-teal hover:text-isola-orange transition font-bold no-underline">CONCEPT</a>
+                <a href="#menu" class="font-heading text-lg text-isola-teal hover:text-isola-orange transition font-bold no-underline">MENU</a>
+                <a href="#" class="font-heading text-lg text-isola-teal hover:text-isola-orange transition font-bold no-underline">ONLINE SHOP</a>
+                <a href="#access" class="font-heading text-lg text-isola-teal hover:text-isola-orange transition font-bold no-underline">ACCESS</a>
+                <a href="#" class="text-isola-teal hover:text-isola-orange transition text-2xl no-underline"><i class="fab fa-instagram"></i></a>
+            </nav>
+            <button id="menu-btn" class="md:hidden relative z-50 text-isola-teal focus:outline-none bg-white/80 p-2 rounded-full shadow-lg">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="fixed inset-0 bg-white/95 z-40 transform translate-x-full transition-transform duration-500 flex flex-col items-center justify-center space-y-8">
+            <span class="font-hand text-4xl text-isola-teal mb-4 transform -rotate-6">Have a sweet day!</span>
+            <a href="#concept" class="mobile-link font-heading text-5xl text-isola-teal hover:text-isola-orange font-bold no-underline">CONCEPT</a>
+            <a href="#menu" class="mobile-link font-heading text-5xl text-isola-teal hover:text-isola-orange font-bold no-underline">MENU</a>
+            <a href="#" class="mobile-link font-heading text-5xl text-isola-teal hover:text-isola-orange font-bold no-underline">ONLINE SHOP</a>
+            <a href="#access" class="mobile-link font-heading text-5xl text-isola-teal hover:text-isola-orange font-bold no-underline">ACCESS</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <!-- 修正: スマホでのヘッダー被りを防ぐため、pt-10 を pt-28 に変更し、PCでは pt-20 に戻す調整を追加 -->
+    <section class="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-28 md:pt-20 pb-20">
+        <!-- 写真は JPEG (.jpg) -->
+        <div class="absolute inset-0 z-0 bg-gray-100">
+            <!-- 1枚目 -->
+            <div class="slide-item animate-slideshow" style="background-image: url('slide_01.jpg'); animation-delay: 0s;">
+                <img src="slide_01.jpg" class="hidden" alt="Hero 1">
+            </div>
+            <!-- 2枚目 -->
+            <div class="slide-item animate-slideshow" style="background-image: url('slide_02.jpg'); animation-delay: 6s;">
+                <img src="slide_02.jpg" class="hidden" alt="Hero 2">
+            </div>
+            <!-- 3枚目 -->
+            <div class="slide-item animate-slideshow" style="background-image: url('slide_03.jpg'); animation-delay: 12s;">
+                <img src="slide_03.jpg" class="hidden" alt="Hero 3">
+            </div>
+            <!-- 4枚目 -->
+            <div class="slide-item animate-slideshow" style="background-image: url('slide_04.jpg'); animation-delay: 18s;">
+                <img src="slide_04.jpg" class="hidden" alt="Hero 4">
+            </div>
+            <div class="absolute inset-0 bg-black/20"></div>
+        </div>
+
+        <!-- 修正: mt-10 を mt-4 md:mt-10 に変更して微調整 -->
+        <div class="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center h-full mt-4 md:mt-10">
+            <div class="mb-8 animate-float">
+                <span class="bg-white/90 text-isola-teal font-bold px-4 py-2 md:px-6 md:py-2 rounded-full shadow-lg border border-isola-teal/20 transform -rotate-2 inline-block tracking-wider text-xs md:text-sm">
+                    <i class="fas fa-map-marker-alt text-isola-orange mr-2"></i> AMERICAN VILLAGE, OKINAWA
+                </span>
+            </div>
+            <div class="text-center animate-fade-up px-4">
+                <h2 class="font-body text-lg md:text-2xl text-white font-bold mb-4 text-shadow-md tracking-wider">
+                    沖縄の素材を極めた、<br class="md:hidden">至福のジェラート体験。
+                </h2>
+                <h1 class="font-heading text-4xl md:text-7xl text-white font-bold mb-6 tracking-wide text-shadow-md opacity-95 leading-tight">
+                    GELATO <span class="text-isola-yellow">SOMETIMES</span> DONUTS
+                </h1>
+                <div class="w-16 md:w-24 h-[1px] bg-white/60 mx-auto my-6"></div>
+                <p class="font-body text-[10px] md:text-xs text-white/80 tracking-[0.3em] uppercase mb-3 text-shadow-sm">
+                    - WHAT DO YOU FEEL LIKE TODAY? -
+                </p>
+                <p class="font-hand text-xl md:text-3xl text-white/90 transform -rotate-2 text-shadow-md">
+                    170° / -10° <span class="text-isola-orange/90">SWEETS</span>
+                </p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center w-full relative z-20 mt-12">
+                <a href="#access" class="group relative px-8 py-3 md:px-10 md:py-4 bg-white/90 text-isola-teal shadow-xl rounded-full overflow-hidden transition-all hover:shadow-2xl hover:scale-105 w-60 md:w-64 text-center backdrop-blur-sm border-2 border-white no-underline">
+                    <span class="relative z-10 font-heading font-bold tracking-widest text-lg">ACCESS</span>
+                </a>
+                <a href="#" class="group relative px-8 py-3 md:px-10 md:py-4 bg-isola-teal/90 text-white border-2 border-isola-teal shadow-xl rounded-full overflow-hidden transition-all hover:bg-isola-teal hover:text-white hover:scale-105 w-60 md:w-64 text-center backdrop-blur-sm no-underline">
+                    <span class="relative z-10 font-heading font-bold tracking-widest text-lg">ONLINE SHOP</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-12 right-4 md:right-10 z-30 w-24 md:w-32 animate-float pointer-events-none opacity-90 hidden sm:block">
+             <!-- ロゴサブ: logo-sub.png -->
+             <img src="logo-sub.png" onerror="this.onerror=null; this.style.display='none'" alt="ISOLA Character" class="w-full h-auto drop-shadow-lg transform rotate-[-12deg]">
+        </div>
+    </section>
+
+    <!-- Category Links -->
+    <section id="category-select" class="py-12 md:py-16 bg-white relative z-20 -mt-10 rounded-t-[2rem] md:rounded-t-[3rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-8 md:mb-10">
+                <p class="font-hand text-2xl md:text-3xl text-isola-teal transform -rotate-2">Pick your favorite!</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
+                <!-- Gelato Link -->
+                <a href="#menu-gelato" class="group relative h-56 md:h-80 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 block no-underline">
+                    <!-- category_gelato.jpg -->
+                    <img src="category_gelato.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1557142046-c704a3adf364?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Gelato Category" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-isola-teal/40 group-hover:bg-isola-teal/30 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+                        <h3 class="font-heading text-4xl md:text-5xl font-bold tracking-widest drop-shadow-lg">GELATO</h3>
+                        <span class="mt-4 px-6 py-2 border-2 border-white rounded-full font-bold tracking-wider text-xs md:text-sm group-hover:bg-white group-hover:text-isola-teal transition-colors">VIEW MENU <i class="fas fa-arrow-down ml-2"></i></span>
+                    </div>
+                </a>
+
+                <!-- Donut Link -->
+                <a href="#menu-donuts" class="group relative h-56 md:h-80 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 block no-underline">
+                    <!-- category_donut.jpg -->
+                    <img src="category_donut.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1631397833249-161d9a2072e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Donuts Category" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-isola-orange/40 group-hover:bg-isola-orange/30 transition-colors"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+                        <h3 class="font-heading text-4xl md:text-5xl font-bold tracking-widest drop-shadow-lg">DONUTS</h3>
+                        <span class="mt-4 px-6 py-2 border-2 border-white rounded-full font-bold tracking-wider text-xs md:text-sm group-hover:bg-white group-hover:text-isola-orange transition-colors">VIEW MENU <i class="fas fa-arrow-down ml-2"></i></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Concierge -->
+    <section id="ai-concierge" class="py-16 md:py-24 bg-gradient-to-r from-isola-teal/5 to-isola-yellow/5 relative overflow-hidden">
+        <div class="container mx-auto px-4 max-w-4xl relative z-10">
+            <div class="text-center mb-10 fade-in-section">
+                <span class="font-hand text-3xl md:text-4xl text-isola-pink transform rotate-3 inline-block mb-2">Can't Decide?</span>
+                <h2 class="font-heading text-4xl md:text-5xl text-isola-teal font-bold drop-shadow-sm flex items-center justify-center gap-3">
+                    <i class="fas fa-sparkles text-isola-yellow animate-pulse"></i> AI FLAVOR CONCIERGE
+                </h2>
+                <p class="text-gray-600 mt-4 text-sm md:text-base max-w-2xl mx-auto">
+                    気分に合わせて、AIがあなたにぴったりのジェラートやドーナツをご提案します。<br>
+                    「さっぱりしたい」「甘いものが食べたい」など、今の気分を教えてください！
+                </p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 border-2 border-isola-teal/10 fade-in-section">
+                <div id="ai-response-area" class="min-h-[120px] mb-6 p-4 rounded-2xl bg-isola-teal/5 border border-isola-teal/10 hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-isola-teal flex items-center justify-center text-white flex-shrink-0">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-isola-teal text-sm mb-1">ISOLA AI Concierge</p>
+                            <div id="ai-response-text" class="text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input type="text" id="user-mood-input" placeholder="例：海を見ながら、さっぱりしたものが食べたい！" 
+                        class="flex-1 px-6 py-4 rounded-xl border-2 border-gray-200 focus:border-isola-teal focus:ring-2 focus:ring-isola-teal/20 outline-none transition text-gray-700 placeholder-gray-400">
+                    <button onclick="askAiConcierge()" id="ask-ai-btn" class="bg-isola-teal text-white font-bold py-4 px-8 rounded-xl hover:bg-isola-orange transition transform hover:-translate-y-1 shadow-md flex items-center justify-center gap-2 min-w-[160px]">
+                        <span>ASK AI</span> <i class="fas fa-magic"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-gray-400 mt-3 text-center">Powered by Gemini AI ✨</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept -->
+    <section id="concept" class="py-16 md:py-24 relative overflow-hidden bg-white">
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-64 h-64 md:w-96 md:h-96 bg-isola-orange/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+            <div class="absolute top-[20%] right-[-10%] w-64 h-64 md:w-96 md:h-96 bg-isola-teal/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" style="animation-delay: 2s"></div>
+            <div class="absolute bottom-[-10%] left-[20%] w-64 h-64 md:w-96 md:h-96 bg-isola-yellow/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" style="animation-delay: 4s"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-12 md:gap-24">
+                <div class="w-full md:w-1/2 fade-in-section">
+                    <div class="relative transform rotate-2 hover:rotate-0 transition duration-500">
+                        <div class="border-4 border-white shadow-2xl rounded-3xl overflow-hidden">
+                            <!-- story_gelato.jpg -->
+                            <img src="story_gelato.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1490885578174-acda8905c2c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Gelato Ingredients" class="w-full h-auto object-cover hover:scale-105 transition duration-1000">
+                        </div>
+                        <div class="absolute -top-4 -left-4 md:-top-6 md:-left-6 bg-isola-orange text-white w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center font-bold shadow-lg transform -rotate-12 animate-bounce">
+                            <span class="text-center text-[10px] md:text-xs leading-tight font-heading tracking-widest">FROM<br>ISLAND</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/2 text-center md:text-left fade-in-section">
+                    <span class="font-hand text-3xl md:text-4xl text-isola-teal block mb-4 transform -rotate-2">Our Gelato Story</span>
+                    <h2 class="font-heading text-4xl md:text-5xl text-isola-teal mb-4 leading-tight font-bold tracking-wide">
+                        GENTLE BREEZE,<br>
+                        <span class="text-isola-yellow text-shadow-sm">HONEST TASTE.</span>
+                    </h2>
+                    <h3 class="text-base md:text-lg text-isola-teal/80 mb-8 font-bold tracking-widest border-l-4 border-isola-orange pl-4 leading-relaxed font-body">
+                        海風を感じながら味わう、<br class="md:hidden">素材にこだわった本物の味。
+                    </h3>
+                    <p class="text-gray-600 leading-loose mb-8 text-sm md:text-base font-medium font-body tracking-wider">
+                        南国の陽光をたっぷりと浴びた、<br class="hidden md:inline">生命力あふれる島素材。<br>
+                        その本来の美味しさを真っ直ぐに届けるため、<br>
+                        余計なものは足さず、職人の手仕事でひとつひとつ、<br>
+                        丁寧に仕上げています。
+                    </p>
+                    <div class="flex gap-4 justify-center md:justify-start">
+                        <span class="px-4 py-2 bg-isola-teal/5 text-isola-teal rounded-full font-bold text-xs md:text-sm tracking-widest border border-isola-teal/20">#NATURAL</span>
+                        <span class="px-4 py-2 bg-isola-orange/5 text-isola-orange rounded-full font-bold text-xs md:text-sm tracking-widest border border-isola-orange/20">#HANDMADE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="donut-story" class="py-16 md:py-24 relative overflow-hidden bg-white/50">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-24">
+                <div class="w-full md:w-1/2 fade-in-section">
+                    <div class="relative transform -rotate-2 hover:rotate-0 transition duration-500">
+                        <div class="border-4 border-white shadow-2xl rounded-3xl overflow-hidden">
+                            <!-- story_donut.jpg -->
+                            <img src="story_donut.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551024601-bec78aea704b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Fresh Fried Donuts" class="w-full h-full object-cover hover:scale-105 transition duration-1000">
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-isola-yellow text-white w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center font-bold shadow-lg transform rotate-12 animate-bounce">
+                            <span class="text-center text-[10px] md:text-xs leading-tight font-heading tracking-widest">FRESH<br>FRIED</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/2 text-center md:text-left fade-in-section">
+                    <span class="font-hand text-3xl md:text-4xl text-isola-orange block mb-4 transform rotate-2">The Art of Dough</span>
+                    <h2 class="font-heading text-4xl md:text-5xl text-isola-teal mb-4 leading-tight font-bold tracking-wide">
+                        170° GOLDEN<br>
+                        <span class="text-isola-yellow text-shadow-sm">REAL QUALITY.</span>
+                    </h2>
+                    <h3 class="text-base md:text-lg text-isola-teal/80 mb-8 font-bold tracking-widest border-l-4 border-isola-yellow pl-4 leading-relaxed font-body">
+                        国産小麦とくがにたまご。<br class="md:hidden">体に優しい、本物のドーナツ。
+                    </h3>
+                    <p class="text-gray-600 leading-loose mb-8 text-sm md:text-base font-medium font-body tracking-wider">
+                        北海道産小麦のブレンド生地に、沖縄の黄金（くがに）たまごを使用。<br class="hidden md:inline">
+                        トランス脂肪酸99%カットの油で揚げた、心にも体にも優しいドーナツです。<br>
+                        試行錯誤の末に辿り着いた、素材本来の味をお楽しみください。
+                    </p>
+                    <div class="flex gap-4 justify-center md:justify-start">
+                        <span class="px-4 py-2 bg-isola-teal/5 text-isola-teal rounded-full font-bold text-xs md:text-sm tracking-widest border border-isola-teal/20">#HEALTHY</span>
+                        <span class="px-4 py-2 bg-isola-yellow/5 text-isola-yellow rounded-full font-bold text-xs md:text-sm tracking-widest border border-isola-yellow/20">#PREMIUM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu -->
+    <section id="menu" class="py-16 md:py-24 bg-gradient-to-b from-white to-isola-teal/5 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16 fade-in-section">
+                <span class="font-hand text-3xl md:text-4xl text-isola-orange transform rotate-3 inline-block mb-2">Let's Eat!</span>
+                <h2 class="font-heading text-5xl md:text-6xl text-isola-teal font-bold drop-shadow-sm">MENU</h2>
+            </div>
+
+            <div id="menu-gelato" class="mb-20 md:mb-24 scroll-mt-24">
+                <div class="flex flex-col items-center justify-center gap-2 mb-8 md:mb-10 fade-in-section">
+                    <div class="flex items-center gap-4">
+                        <svg class="w-10 h-10 md:w-12 md:h-12 text-isola-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22l-8-8c0-4.418 3.582-8 8-8s8 3.582 8 8l-8 8z" />
+                            <path d="M12 14v8" stroke-width="0.5"/>
+                            <path d="M7 9 q5 5 10 0" stroke-width="0.5" fill="none" />
+                        </svg>
+                        <h3 class="font-heading text-3xl md:text-4xl text-isola-teal font-bold tracking-widest">GELATO</h3>
+                    </div>
+                    <span class="text-isola-teal/70 text-sm font-bold tracking-wide border-b border-isola-yellow pb-1">
+                        <i class="fas fa-leaf text-isola-orange mr-1"></i> Vegan Sorbet Available / ソルベジェラートもあります
+                    </span>
+                </div>
+
+                <div class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 no-scrollbar px-4 md:px-0 -mx-4 md:mx-auto">
+                    <!-- Item 1 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white p-4 pb-8 rounded-3xl shadow-xl hover:shadow-2xl transition duration-500 transform hover:-translate-y-2 fade-in-section group border-2 border-transparent hover:border-isola-yellow">
+                        <div class="w-full aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                            <!-- gelato_milk.jpg -->
+                            <img src="gelato_milk.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1558500276-88c99187310d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Milk Gelato Texture" data-title="MA-SU MILK">
+                             <div class="absolute top-4 right-4 bg-white/90 text-isola-teal font-bold px-3 py-1 rounded-full text-xs shadow-md">EGG-FREE</div>
+                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                             </div>
+                        </div>
+                        <h4 class="font-heading text-2xl text-isola-teal mb-2 font-bold">MA-SU MILK</h4>
+                        <p class="text-sm text-gray-500 font-bold">まーすミルク</p>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white p-4 pb-8 rounded-3xl shadow-xl hover:shadow-2xl transition duration-500 transform hover:-translate-y-2 fade-in-section group border-2 border-transparent hover:border-isola-orange" style="transition-delay: 100ms;">
+                        <div class="w-full aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                            <!-- gelato_raspberry.jpg -->
+                            <img src="gelato_raspberry.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1579954115545-a95591f28bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Raspberry Texture" data-title="RASPBERRY GUAVA">
+                             <div class="absolute top-4 right-4 bg-isola-orange text-white font-bold px-3 py-1 rounded-full text-xs shadow-md">VEGAN</div>
+                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                             </div>
+                        </div>
+                        <h4 class="font-heading text-2xl text-isola-teal mb-2 font-bold">RASPBERRY GUAVA</h4>
+                        <p class="text-sm text-gray-500 font-bold">ラズベリーグアバ</p>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white p-4 pb-8 rounded-3xl shadow-xl hover:shadow-2xl transition duration-500 transform hover:-translate-y-2 fade-in-section group border-2 border-transparent hover:border-isola-teal" style="transition-delay: 200ms;">
+                        <div class="w-full aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                            <!-- gelato_pistachio.jpg -->
+                            <img src="gelato_pistachio.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618331835717-801e976710b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Pistachio Texture" data-title="PISTACHIO">
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                             </div>
+                        </div>
+                        <h4 class="font-heading text-2xl text-isola-teal mb-2 font-bold">PISTACHIO</h4>
+                        <p class="text-sm text-gray-500 font-bold">ピスタチオ</p>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white p-4 pb-8 rounded-3xl shadow-xl hover:shadow-2xl transition duration-500 transform hover:-translate-y-2 fade-in-section group border-2 border-transparent hover:border-isola-yellow" style="transition-delay: 300ms;">
+                        <div class="w-full aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                            <!-- gelato_mango.jpg -->
+                            <img src="gelato_mango.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Mango Sorbet" data-title="MANGO SORBET">
+                             <div class="absolute top-4 right-4 bg-isola-orange text-white font-bold px-3 py-1 rounded-full text-xs shadow-md">VEGAN</div>
+                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                             </div>
+                        </div>
+                        <h4 class="font-heading text-2xl text-isola-teal mb-2 font-bold">MANGO SORBET</h4>
+                        <p class="text-sm text-gray-500 font-bold">マンゴーソルベ</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="menu-donuts" class="mb-16 scroll-mt-24">
+                <div class="flex items-center justify-center gap-4 mb-10 fade-in-section">
+                    <svg class="w-10 h-10 md:w-12 md:h-12 text-isola-sunset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"/>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M7.8 7.8c.5-.5 1.2-.5 1.7 0"/>
+                        <path d="M14.5 7.8c.5-.5 1.2-.5 1.7 0"/>
+                    </svg>
+                    <h3 class="font-heading text-3xl md:text-4xl text-isola-teal font-bold tracking-widest">DONUTS</h3>
+                </div>
+
+                 <div class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 no-scrollbar px-4 md:px-0 -mx-4 md:mx-auto">
+                    <!-- Item 1 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white rounded-3xl shadow-lg border-2 border-gray-100 hover:border-isola-yellow overflow-hidden group fade-in-section hover:shadow-xl transition-all">
+                        <div class="w-full aspect-square overflow-hidden bg-gray-50 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                             <!-- donut_choco.jpg -->
+                             <img src="donut_choco.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1606312619070-d48b4c652a52?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" alt="Chocolate Donut" data-title="CHOCOLATE">
+                             <div class="absolute bottom-4 left-4 bg-isola-yellow text-isola-teal font-bold px-3 py-1 rounded-lg text-xs shadow-sm transform -rotate-2">POPULAR</div>
+                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                             </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h4 class="font-heading text-2xl text-isola-teal font-bold mb-1">CHOCOLATE</h4>
+                            <p class="text-xs text-gray-400 font-bold mb-3 tracking-wider">チョコレート</p>
+                            <p class="text-sm text-gray-600">Rich chocolate glaze on fluffy yeast dough.</p>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white rounded-3xl shadow-lg border-2 border-gray-100 hover:border-isola-blue overflow-hidden group fade-in-section hover:shadow-xl transition-all" style="transition-delay: 100ms;">
+                            <div class="w-full aspect-square overflow-hidden bg-gray-50 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                               <!-- donut_white.jpg -->
+                               <img src="donut_white.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1629452395646-b6009893d179?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" alt="Glazed Donut" data-title="WHITE GLAZE">
+                               <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                               </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h4 class="font-heading text-2xl text-isola-teal font-bold mb-1">WHITE GLAZE</h4>
+                            <p class="text-xs text-gray-400 font-bold mb-3 tracking-wider">ホワイトグレーズ</p>
+                            <p class="text-sm text-gray-600">Simple and sweet white sugar glaze.</p>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white rounded-3xl shadow-lg border-2 border-gray-100 hover:border-isola-sunset overflow-hidden group fade-in-section hover:shadow-xl transition-all" style="transition-delay: 200ms;">
+                            <div class="w-full aspect-square overflow-hidden bg-gray-50 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                               <!-- donut_bomboloni.jpg -->
+                               <img src="donut_bomboloni.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584447128309-b66b7a4d1b17?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" alt="Bomboloni" data-title="BOMBOLONI">
+                               <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                               </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h4 class="font-heading text-2xl text-isola-teal font-bold mb-1">BOMBOLONI</h4>
+                            <p class="text-xs text-gray-400 font-bold mb-3 tracking-wider">ボンボローニ</p>
+                            <p class="text-sm text-gray-600">Italian style filled donut with custard cream.</p>
+                        </div>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="min-w-[85%] md:min-w-0 snap-center bg-white rounded-3xl shadow-lg border-2 border-gray-100 hover:border-isola-yellow overflow-hidden group fade-in-section hover:shadow-xl transition-all" style="transition-delay: 300ms;">
+                        <div class="w-full aspect-square overflow-hidden bg-gray-50 relative cursor-pointer zoomable-image" onclick="openModal(this)">
+                             <!-- donut_cinnamon.jpg -->
+                             <img src="donut_cinnamon.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1614597396930-a69e078882d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700" alt="Cinnamon Sugar Donut" data-title="CINNAMON SUGAR">
+                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                 <i class="fas fa-search-plus text-white text-3xl zoom-icon"></i>
+                             </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h4 class="font-heading text-2xl text-isola-teal font-bold mb-1">CINNAMON</h4>
+                            <p class="text-xs text-gray-400 font-bold mb-3 tracking-wider">シナモンシュガー</p>
+                            <p class="text-sm text-gray-600">Classic cinnamon sugar coating.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-20 max-w-5xl mx-auto fade-in-section">
+                <div class="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-isola-teal/10 flex flex-col md:flex-row">
+                    <div class="w-full md:w-1/2 relative min-h-[300px]">
+                        <!-- takeout_box.jpg -->
+                        <img src="takeout_box.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599326260275-c51724285b46?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Donut Box Gift" class="absolute inset-0 w-full h-full object-cover">
+                        <!-- オリジナルドーナツ袋画像（オーバーレイ） -->
+                        <!-- 修正: サイズを w-32 md:w-40 から w-24 md:w-32 に変更して約20%縮小 -->
+                        <div class="absolute bottom-4 right-4 w-24 md:w-32 transform rotate-[-5deg] shadow-lg rounded-xl overflow-hidden border-2 border-white/50 group hover:scale-105 transition duration-300">
+                             <!-- takeout_bag.png -->
+                             <img src="takeout_bag.png" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1631397833249-161d9a2072e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'" alt="Original Donut Bag" class="w-full h-auto">
+                        </div>
+                        <div class="absolute top-4 left-4 bg-isola-pink text-white font-bold px-4 py-1 rounded-full text-xs shadow-md tracking-widest">
+                            <i class="fas fa-gift mr-1"></i> GIFT BOX AVAILABLE
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-white">
+                        <span class="font-hand text-3xl text-isola-orange mb-2 transform -rotate-1">Takeout & Gift</span>
+                        <h3 class="font-heading text-3xl md:text-4xl text-isola-teal font-bold mb-4">
+                            専用ボックスで、<br>おいしさをお裾分け。
+                        </h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
+                            ISOLA特製のドーナツボックスをご用意しています。<br>
+                            また、食べ歩きにぴったりなオリジナルデザインのドーナツ袋も人気です。<br>
+                            揚げたての美味しさをそのままに、大切な人への手土産や、海辺でのピクニックにいかがですか？
+                        </p>
+                        <div class="flex gap-6">
+                            <div class="flex items-center gap-2 text-isola-teal text-xs font-bold">
+                                <span class="w-8 h-8 rounded-full bg-isola-teal/10 flex items-center justify-center text-isola-teal text-sm"><i class="fas fa-walking"></i></span>
+                                <span>食べ歩き</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-isola-teal text-xs font-bold">
+                                <span class="w-8 h-8 rounded-full bg-isola-teal/10 flex items-center justify-center text-isola-teal text-sm"><i class="fas fa-gift"></i></span>
+                                <span>お土産</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-isola-teal text-xs font-bold">
+                                <span class="w-8 h-8 rounded-full bg-isola-teal/10 flex items-center justify-center text-isola-teal text-sm"><i class="fas fa-umbrella-beach"></i></span>
+                                <span>ビーチで</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-16 pt-16 border-t border-isola-teal/10 fade-in-section">
+                <div class="text-center mb-10">
+                    <span class="font-hand text-2xl text-isola-teal/60 mb-1 block">Perfect match with sweets</span>
+                    <h3 class="font-heading text-3xl md:text-4xl text-isola-teal font-bold tracking-widest flex items-center justify-center gap-3">
+                        <i class="fas fa-mug-hot text-isola-yellow text-2xl"></i> DRINK
+                    </h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto px-4">
+                    <div class="bg-white/60 p-5 rounded-2xl border border-white hover:shadow-md transition text-center group">
+                        <div class="w-16 h-16 mx-auto rounded-full overflow-hidden mb-3 border-2 border-isola-teal/20">
+                            <!-- drink_coffee.jpg -->
+                            <img src="drink_coffee.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'" alt="Latte" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h4 class="font-heading text-lg text-isola-teal font-bold mb-2">COFFEE & LATTE</h4>
+                        <ul class="text-xs text-gray-600 space-y-1 font-medium">
+                            <li>グアテマラコーヒー</li>
+                            <li>チャイ</li>
+                            <li>カフェラテ</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white/60 p-5 rounded-2xl border border-white hover:shadow-md transition text-center group">
+                            <div class="w-16 h-16 mx-auto rounded-full overflow-hidden mb-3 border-2 border-isola-orange/20">
+                               <!-- drink_tropical.jpg -->
+                               <img src="drink_tropical.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'" alt="Mango Juice" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h4 class="font-heading text-lg text-isola-teal font-bold mb-2">TROPICAL JUICE</h4>
+                        <ul class="text-xs text-gray-600 space-y-1 font-medium">
+                            <li>マンゴージュース</li>
+                            <li>グアバジュース</li>
+                            <li>シークワーサージュース</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white/60 p-5 rounded-2xl border border-white hover:shadow-md transition text-center group">
+                            <div class="w-16 h-16 mx-auto rounded-full overflow-hidden mb-3 border-2 border-isola-blue/20">
+                               <!-- drink_tea.jpg -->
+                               <img src="drink_tea.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80'" alt="Sanpin Cha" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h4 class="font-heading text-lg text-isola-teal font-bold mb-2">TEA & SODA</h4>
+                        <ul class="text-xs text-gray-600 space-y-1 font-medium">
+                            <li>パッションソーダ</li>
+                            <li>シークワーサーソーダ</li>
+                            <li>マンゴーTEA</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHOTO SPOTS Section -->
+            <section id="photo-spots" class="py-16 md:py-24 bg-white relative">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-12 fade-in-section">
+                        <span class="font-hand text-3xl md:text-4xl text-isola-pink transform -rotate-2 inline-block mb-2">Capture the Moment</span>
+                        <h2 class="font-heading text-4xl md:text-5xl text-isola-teal font-bold drop-shadow-sm">PHOTO SPOTS</h2>
+                        <p class="text-gray-500 mt-4 text-sm md:text-base font-medium">
+                            ISOLAの周りには、思わず写真を撮りたくなる<br>
+                            フォトジェニックなスポットがたくさん！
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-4 md:px-0">
+                        <!-- Spot 1 -->
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-section transform hover:-translate-y-2 transition-all duration-500">
+                            <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden">
+                                <!-- spot_neon.jpg -->
+                                <img src="spot_neon.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1552083375-1447ce886485?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Neon Sign" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-isola-teal/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                <h3 class="text-white font-heading text-2xl font-bold mb-1 tracking-widest">NEON SIGN</h3>
+                                <p class="text-white/90 text-sm font-medium">店舗入り口のネオンサインは<br>夜になるとムーディーな雰囲気に。</p>
+                            </div>
+                            <div class="absolute bottom-4 left-4 bg-white/90 text-isola-teal px-4 py-2 rounded-full text-xs font-bold shadow-md group-hover:opacity-0 transition-opacity border border-isola-teal/20">
+                                <i class="fas fa-camera mr-1"></i> STORE FRONT
+                            </div>
+                        </div>
+
+                        <!-- Spot 2 -->
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-section transform hover:-translate-y-2 transition-all duration-500" style="transition-delay: 100ms;">
+                            <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden">
+                                <!-- spot_seaside.jpg -->
+                                <img src="spot_seaside.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Seaside Walk" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-isola-blue/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                <h3 class="text-white font-heading text-2xl font-bold mb-1 tracking-widest">SEASIDE WALK</h3>
+                                <p class="text-white/90 text-sm font-medium">お店の目の前はすぐ海！<br>青い空と海をバックにジェラートを。</p>
+                            </div>
+                            <div class="absolute bottom-4 left-4 bg-white/90 text-isola-blue px-4 py-2 rounded-full text-xs font-bold shadow-md group-hover:opacity-0 transition-opacity border border-isola-blue/20">
+                                <i class="fas fa-water mr-1"></i> OCEAN VIEW
+                            </div>
+                        </div>
+
+                        <!-- Spot 3 -->
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-section transform hover:-translate-y-2 transition-all duration-500" style="transition-delay: 200ms;">
+                            <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden">
+                                <!-- spot_christmas.jpg -->
+                                <img src="spot_christmas.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512353087810-25dfcd100962?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Christmas Land" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-isola-orange/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                <h3 class="text-white font-heading text-2xl font-bold mb-1 tracking-widest">CHRISTMAS LAND</h3>
+                                <p class="text-white/90 text-sm font-medium">一年中クリスマス気分が味わえる<br>人気スポットがすぐ隣に！</p>
+                            </div>
+                            <div class="absolute bottom-4 left-4 bg-white/90 text-isola-orange px-4 py-2 rounded-full text-xs font-bold shadow-md group-hover:opacity-0 transition-opacity border border-isola-orange/20">
+                                <i class="fas fa-star mr-1"></i> NEXT DOOR
+                            </div>
+                        </div>
+
+                        <!-- Spot 4 -->
+                        <div class="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer fade-in-section transform hover:-translate-y-2 transition-all duration-500" style="transition-delay: 300ms;">
+                            <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden">
+                                <!-- spot_sunset.jpg -->
+                                <img src="spot_sunset.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'" alt="Sunset Beach" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-isola-sunset/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                <h3 class="text-white font-heading text-2xl font-bold mb-1 tracking-widest">SUNSET BEACH</h3>
+                                <p class="text-white/90 text-sm font-medium">夕暮れ時は息をのむ美しさ。<br>ロマンチックな時間を。</p>
+                            </div>
+                            <div class="absolute bottom-4 left-4 bg-white/90 text-isola-sunset px-4 py-2 rounded-full text-xs font-bold shadow-md group-hover:opacity-0 transition-opacity border border-isola-sunset/20">
+                                <i class="fas fa-sun mr-1"></i> SUNSET VIEW
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MEDIA -->
+            <section id="media" class="py-16 md:py-20 bg-white relative">
+                <div class="container mx-auto px-6">
+                        <div class="text-center mb-12 fade-in-section">
+                            <h2 class="font-heading text-4xl md:text-5xl text-isola-teal font-bold mb-4">MEDIA & PRESS</h2>
+                            <div class="w-16 h-1 bg-isola-yellow mx-auto rounded-full"></div>
+                            <p class="text-gray-500 mt-4 text-sm">メディア掲載実績</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 items-center justify-center max-w-5xl mx-auto">
+                            <div class="fade-in-section group cursor-pointer text-center p-4 border border-gray-100 rounded-xl hover:shadow-md transition">
+                                <div class="h-32 overflow-hidden mb-2 flex items-center justify-center">
+                                    <!-- media_01.jpg -->
+                                    <img src="media_01.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'" class="max-h-full max-w-full object-cover rounded-lg transition" alt="Media 1">
+                                </div>
+                                <span class="font-heading text-sm font-bold text-gray-400 block group-hover:text-isola-teal transition">Okinawa<br>Resort Guide</span>
+                            </div>
+                            <div class="fade-in-section group cursor-pointer text-center p-4 border border-gray-100 rounded-xl hover:shadow-md transition" style="transition-delay: 100ms;">
+                                <div class="h-32 overflow-hidden mb-2 flex items-center justify-center">
+                                    <!-- media_02.jpg -->
+                                    <img src="media_02.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'" class="max-h-full max-w-full object-cover rounded-lg transition" alt="Media 2">
+                                </div>
+                                <span class="font-heading text-sm font-bold text-gray-400 block group-hover:text-isola-teal transition">Travel<br>Magazine 2024</span>
+                            </div>
+                            <div class="fade-in-section group cursor-pointer text-center p-4 border border-gray-100 rounded-xl hover:shadow-md transition" style="transition-delay: 200ms;">
+                                <div class="h-32 overflow-hidden mb-2 flex items-center justify-center">
+                                    <!-- media_03.jpg -->
+                                    <img src="media_03.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'" class="max-h-full max-w-full object-cover rounded-lg transition" alt="Media 3">
+                                </div>
+                                <span class="font-heading text-sm font-bold text-gray-400 block group-hover:text-isola-teal transition">Sweet<br>Lovers Web</span>
+                            </div>
+                            <div class="fade-in-section group cursor-pointer text-center p-4 border border-gray-100 rounded-xl hover:shadow-md transition" style="transition-delay: 300ms;">
+                                <div class="h-32 overflow-hidden mb-2 flex items-center justify-center">
+                                    <!-- media_04.jpg -->
+                                    <img src="media_04.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1481214110143-ed6303a405dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'" class="max-h-full max-w-full object-cover rounded-lg transition" alt="Media 4">
+                                </div>
+                                <span class="font-heading text-sm font-bold text-gray-400 block group-hover:text-isola-teal transition">Cafe<br>Life</span>
+                            </div>
+                        </div>
+                        <p class="text-center text-gray-400 text-xs mt-8">and more...</p>
+                    </div>
+            </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-16 md:py-24 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col items-center mb-10 fade-in-section">
+                <i class="fab fa-instagram text-4xl text-isola-orange mb-2"></i>
+                <h2 class="font-heading text-5xl text-isola-teal font-bold">#ISOLA_OKINAWA</h2>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-6">
+                <!-- 固定画像1 -->
+                <a href="https://instagram.com" target="_blank" class="no-underline bg-white p-2 shadow-lg rotate-[-2deg] hover:rotate-0 transition duration-300 w-64 fade-in-section group hover:z-10 block cursor-pointer">
+                    <div class="aspect-square bg-gray-100 mb-2 overflow-hidden relative">
+                        <!-- gallery_01.jpg -->
+                        <img src="gallery_01.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1582235306660-f6556f8f5205?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Instagram 1">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <p class="font-hand text-center text-isola-teal text-xl">Yummy!</p>
+                </a>
+                
+                <!-- 固定画像2 -->
+                <a href="https://instagram.com" target="_blank" class="no-underline bg-white p-2 shadow-lg rotate-[3deg] hover:rotate-0 transition duration-300 w-64 fade-in-section hover:z-10" style="transition-delay: 100ms;">
+                    <div class="aspect-square bg-gray-100 mb-2 overflow-hidden relative">
+                        <!-- gallery_02.jpg -->
+                        <img src="gallery_02.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1551529834-525807d6b4f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover" alt="Instagram 2">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <p class="font-hand text-center text-isola-pink text-xl">Sunny Day</p>
+                </a>
+                
+                <!-- 固定画像3 -->
+                <a href="https://instagram.com" target="_blank" class="no-underline bg-white p-2 shadow-lg rotate-[-1deg] hover:rotate-0 transition duration-300 w-64 fade-in-section hover:z-10" style="transition-delay: 200ms;">
+                    <div class="aspect-square bg-gray-100 mb-2 overflow-hidden relative">
+                        <!-- gallery_03.jpg -->
+                        <img src="gallery_03.jpg" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1629896740682-1dd2d69e4f04?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'" class="w-full h-full object-cover" alt="Instagram 3">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <p class="font-hand text-center text-isola-yellow text-xl">Favorite</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Access Section -->
+    <section id="access" class="py-24 bg-[#EBE5CE] relative">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12 items-center max-w-6xl mx-auto">
+                <div class="w-full lg:w-1/2 fade-in-section">
+                    <span class="font-hand text-3xl text-isola-teal mb-2 block">Find us here</span>
+                    <h2 class="font-heading text-6xl text-white font-bold mb-8 text-shadow-sm">ACCESS</h2>
+                    
+                    <div class="space-y-6 text-gray-700 font-medium">
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border-l-8 border-isola-orange">
+                            <h3 class="font-bold text-isola-orange mb-2 flex items-center">
+                                <i class="fas fa-shoe-prints mr-2"></i> LOCATION GUIDE
+                            </h3>
+                            <p class="text-sm md:text-base leading-relaxed mb-2">
+                                <strong class="block text-isola-teal">Right next to "Christmas Land"!</strong>
+                                We are located on the 1st floor of Depot Island Seaside. Look for the photo spot "Christmas Land".
+                            </p>
+                            <p class="text-xs md:text-sm text-gray-500 mb-4">
+                                <strong class="block text-gray-600">店舗への行き方（迷いやすいのでご注意ください）</strong>
+                                アメリカンビレッジ内の人気撮影スポット<span class="text-isola-orange font-bold">「クリスマスランド」</span>を目印にお越しください。店舗はそのすぐ隣にあります。
+                            </p>
+                            
+                            <a href="#" class="flex items-center justify-center w-full bg-isola-teal text-white font-bold py-3 px-4 rounded-lg hover:bg-isola-orange transition transform hover:-translate-y-1 shadow-md no-underline">
+                                <i class="fas fa-play-circle mr-2 text-xl text-isola-yellow"></i>
+                                <span>動画で行き方を見る / Watch Video Guide</span>
+                            </a>
+                        </div>
+
+                        <div class="bg-white/80 p-6 rounded-2xl shadow-sm">
+                            <p class="text-xl">
+                                <strong class="font-bold block text-sm tracking-widest mb-1 opacity-60 font-heading text-isola-teal">ADDRESS</strong>
+                                〒904-0115 沖縄県中頭郡北谷町美浜9-21<br>
+                                デポアイランドシーサイド 1F
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white/80 p-6 rounded-2xl shadow-sm relative overflow-hidden">
+                            <p class="text-xl">
+                                <strong class="font-bold block text-sm tracking-widest mb-1 opacity-60 font-heading text-isola-teal">OPEN</strong>
+                                <span class="flex items-center gap-2">
+                                    Seasonal Hours <i class="fas fa-sun text-isola-yellow"></i>
+                                </span>
+                                <span class="text-sm text-gray-500 block mt-1">季節により営業時間が異なります</span>
+                            </p>
+                            <a href="#" class="inline-block mt-3 text-xs font-bold text-white bg-isola-pink px-4 py-2 rounded-full hover:bg-isola-teal transition no-underline">
+                                <i class="fab fa-instagram mr-1"></i> Check Today's Hours
+                            </a>
+                        </div>
+                        
+                        <div class="pt-2">
+                            <div class="bg-isola-yellow text-isola-teal p-6 rounded-2xl relative inline-block w-full max-w-md shadow-lg transform rotate-1 hover:rotate-0 transition cursor-pointer">
+                                <div class="absolute -top-3 -left-3 bg-white text-isola-teal px-3 py-1 rounded-full font-bold text-xs shadow-md border-2 border-isola-teal">FOR TAXI</div>
+                                <i class="fas fa-taxi absolute top-4 right-4 text-4xl opacity-20"></i>
+                                <p class="text-xl font-bold mb-1">沖縄県中頭郡北谷町美浜9-21</p>
+                                <p class="text-base font-bold mb-2">デポアイランドシーサイド 1F</p>
+                                <p class="text-sm font-medium mb-2">ISOLA（イゾラ）までお願いします。</p>
+                                <p class="text-xs border-t border-isola-teal/30 pt-2 mt-2 font-bold">
+                                    <i class="fas fa-parking mr-1"></i> ローソン 美浜アメリカンビレッジ店目の前に駐車場があります。
+                                </p>
+                            </div>
+                        </div>
+                        <a href="https://goo.gl/maps/placeholder" target="_blank" class="inline-block bg-isola-teal text-white font-bold px-8 py-3 rounded-full hover:bg-white hover:text-isola-teal transition shadow-md mt-4 no-underline">
+                            <i class="fas fa-location-arrow mr-2"></i> OPEN IN GOOGLE MAPS
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 h-[400px] lg:h-[600px] fade-in-section relative">
+                    <div class="w-full h-full rounded-3xl overflow-hidden shadow-2xl border-8 border-white">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3576.697472091238!2d127.7554!3d26.3195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34e5130768e16979%3A0x6917711910815121!2sDepot%20Island!5e0!3m2!1sen!2sjp!4v1620000000000!5m2!1sen!2sjp" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <!-- Logo Sub Illustration: 同様に .webp を優先し、フォールバックで .png -->
+                    <img src="logo-sub.webp" onerror="this.onerror=null; this.src='logo-sub.png'" alt="Illustration" class="absolute -bottom-24 -left-12 w-40 md:w-56 drop-shadow-lg transform rotate-6 hover:rotate-0 transition duration-500 hidden lg:block">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-isola-teal text-white py-16 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-isola-yellow via-isola-orange to-isola-blue"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <span class="font-heading text-5xl font-bold tracking-widest mb-8 block">ISOLA</span>
+            <ul class="flex flex-wrap justify-center gap-8 mb-10 font-bold tracking-widest text-lg">
+                <li><a href="#concept" class="hover:text-isola-yellow transition no-underline">CONCEPT</a></li>
+                <li><a href="#menu" class="hover:text-isola-yellow transition no-underline">MENU</a></li>
+                <li><a href="https://simagelato.buyshop.jp/" class="hover:text-isola-yellow transition no-underline">ONLINE SHOP</a></li>
+                <li><a href="#access" class="hover:text-isola-yellow transition no-underline">ACCESS</a></li>
+            </ul>
+            <div class="w-full h-[1px] bg-white/20 max-w-xs mx-auto mb-8"></div>
+            <p class="text-xs font-light tracking-widest opacity-60">© 2024 ISOLA OKINAWA. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="image-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 p-4 transition-opacity duration-300">
+        <div class="relative max-w-4xl w-full">
+            <button onclick="closeModal()" class="absolute -top-12 right-0 text-white text-4xl hover:text-isola-yellow">×</button>
+            <img id="modal-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Zoomed Image" class="w-full h-auto rounded-lg shadow-2xl">
+            <h3 id="modal-caption" class="text-white text-center font-heading text-3xl mt-4 font-bold tracking-widest"></h3>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+            let isMenuOpen = false;
+
+            if(menuBtn){
+                menuBtn.addEventListener('click', () => {
+                    isMenuOpen = !isMenuOpen;
+                    if (isMenuOpen) {
+                        mobileMenu.classList.remove('translate-x-full');
+                        menuBtn.classList.add('bg-white');
+                        menuBtn.classList.remove('bg-white/80');
+                    } else {
+                        mobileMenu.classList.add('translate-x-full');
+                        menuBtn.classList.remove('bg-white');
+                        menuBtn.classList.add('bg-white/80');
+                    }
+                });
+            }
+
+            if(mobileLinks){
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        isMenuOpen = false;
+                        mobileMenu.classList.add('translate-x-full');
+                        menuBtn.classList.remove('bg-white');
+                        menuBtn.classList.add('bg-white/80');
+                    });
+                });
+            }
+
+            const headerBg = document.getElementById('header-bg');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    headerBg.classList.add('bg-white/90', 'shadow-md');
+                    headerBg.classList.remove('bg-white/10');
+                } else {
+                    headerBg.classList.remove('bg-white/90', 'shadow-md');
+                    headerBg.classList.add('bg-white/10');
+                }
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in-section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Modal Functions
+        function openModal(element) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalCaption = document.getElementById('modal-caption');
+            const img = element.querySelector('img');
+            
+            modalImg.src = img.src;
+            modalCaption.textContent = img.getAttribute('data-title');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            
+            document.body.style.overflow = 'auto';
+        }
+
+        const modal = document.getElementById('image-modal');
+        if(modal){
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Gemini AI Logic
+        // 📌 AI API Key automatically provided by environment
+        const apiKey = ""; 
+
+        async function askAiConcierge() {
+            const userInput = document.getElementById('user-mood-input').value;
+            if (!userInput) return;
+
+            const responseArea = document.getElementById('ai-response-area');
+            const responseText = document.getElementById('ai-response-text');
+            const btn = document.getElementById('ask-ai-btn');
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Thinking...';
+            btn.disabled = true;
+            responseArea.classList.remove('hidden');
+            responseText.innerHTML = "店員さんが考えています... <i class='fas fa-coffee'></i>";
+
+            // 確実な回答をするためのローカルルール（AIが使えない、または確実性を重視する場合の辞書）
+            const localRules = [
+                {
+                    keywords: ["アレルギー", "卵", "乳", "牛乳", "小麦", "ヴィーガン", "エッグフリー", "成分", "食べられない"],
+                    recommendation: "Allergy Friendly Options",
+                    message: "アレルギーのご心配ですね、ありがとうございます。ISOLAでは<strong class='text-isola-teal'>「MA-SU MILK（まーすミルク）」</strong>などのミルク系ジェラートは卵不使用、<strong class='text-isola-teal'>「RASPBERRY GUAVA」</strong>などのソルベ系は乳製品・卵不使用（ヴィーガン対応）となっております。<br>※ドーナツは小麦・卵・乳を使用しています。<br>安心してお楽しみいただけるよう、詳細な成分については店舗スタッフにもお気軽にお声がけくださいね🍀"
+                },
+                {
+                    keywords: ["ドライブ", "車", "運転", "移動", "持ち運び"],
+                    recommendation: "Drink & Donuts",
+                    message: "ドライブのお供ですね！🚗<br>片手で楽しめる<strong class='text-isola-teal'>「ドーナツ」</strong>や、車内でも飲みやすい<strong class='text-isola-teal'>「濃厚マンゴージュース」</strong>はいかがですか？<br>アメリカンビレッジから北谷の海沿いをドライブするのにぴったりですよ✨"
+                },
+                {
+                    keywords: ["お土産", "ギフト", "持ち帰り", "テイクアウト", "家", "ホテル", "箱"],
+                    recommendation: "Donut Box",
+                    message: "お土産なら、<strong class='text-isola-teal'>「ドーナツボックス（テイクアウト）」</strong>が一番おすすめです！🎁<br>可愛い箱を開けた瞬間の、皆様の笑顔が目に浮かびます。<br>ホテルに持ち帰って、ゆっくり楽しむのも素敵ですね。"
+                },
+                {
+                    keywords: ["雨", "天気", "寒い", "室内"],
+                    recommendation: "Hot Latte & Bomboloni",
+                    message: "あいにくのお天気ですね☔<br>そんな時は、温かい<strong class='text-isola-teal'>「ホットラテ」</strong>と、ふわふわの<strong class='text-isola-teal'>「ボンボローニ」</strong>で、雨音を聞きながら店内でゆっくり過ごすのが通の楽しみ方です。<br>心も体も温まりますよ☕"
+                },
+                {
+                    keywords: ["デート", "カップル", "恋人", "二人"],
+                    recommendation: "Share Sweets",
+                    message: "デートでのご利用ありがとうございます💕<br>お二人なら、違う種類の<strong class='text-isola-teal'>「ジェラート」</strong>を頼んでシェアするのがおすすめです！<br>海をバックに写真を撮れば、素敵な思い出になりますよ✨"
+                },
+                {
+                    keywords: ["さっぱり", "暑い", "夏", "酸味", "リフレッシュ", "爽やか"],
+                    recommendation: "RASPBERRY GUAVA（ラズベリーグアバ）",
+                    message: "暑い日やさっぱりしたい気分なら、<strong class='text-isola-teal'>「RASPBERRY GUAVA（ラズベリーグアバ）」</strong>が最高です！<br>ヴィーガン対応でフルーティーな酸味が疲れを吹き飛ばしてくれますよ✨<br>ドリンクなら「シークヮーサージュース」もクエン酸たっぷりで元気が出ます！"
+                },
+                {
+                    keywords: ["甘い", "疲れ", "チョコ", "濃厚", "デザート"],
+                    recommendation: "CHOCOLATE（チョコレート） & MA-SU MILK",
+                    message: "甘いもので癒やされたいなら、<strong class='text-isola-teal'>「CHOCOLATE（チョコレート）」ドーナツ</strong>や、<strong class='text-isola-teal'>「MA-SU MILK（まーすミルク）」ジェラート</strong>がおすすめです！<br>沖縄の塩が甘さを引き立てて、至福のひとときになりますよ🍩"
+                },
+                {
+                    keywords: ["海", "ビーチ", "写真", "映え", "景色"],
+                    recommendation: "Takeout Donuts & Colorful Gelato",
+                    message: "海辺で楽しむなら、片手で持てる<strong class='text-isola-teal'>「ドーナツ（テイクアウト）」</strong>がぴったりです！<br>海をバックに写真を撮るなら、カラフルな<strong class='text-isola-teal'>「RASPBERRY GUAVA」</strong>や<strong class='text-isola-teal'>「PISTACHIO」</strong>が映えますよ📸"
+                },
+                {
+                    keywords: ["子供", "家族", "キッズ", "食べやすい"],
+                    recommendation: "WHITE GLAZE（ホワイトグレーズ）",
+                    message: "お子様には、シンプルで優しい甘さの<strong class='text-isola-teal'>「WHITE GLAZE（ホワイトグレーズ）」</strong>が大人気です！<br>ジェラートなら、卵不使用の<strong class='text-isola-teal'>「MA-SU MILK」</strong>が安心で美味しいですよ👶"
+                },
+                {
+                    keywords: ["おすすめ", "人気", "初めて", "迷う", "どれ"],
+                    recommendation: "MA-SU MILK & BOMBOLONI",
+                    message: "初めての方には、ISOLA一番人気の<strong class='text-isola-teal'>「MA-SU MILK（まーすミルク）」</strong>をぜひ食べていただきたいです！<br>ドーナツなら、クリームたっぷりの<strong class='text-isola-teal'>「BOMBOLONI（ボンボローニ）」</strong>がスタッフ一押しです！"
+                },
+                {
+                    keywords: ["コーヒー", "カフェ", "飲み物", "喉"],
+                    recommendation: "Okinawa Kokuto Latte",
+                    message: "ドリンクなら、沖縄ならではの<strong class='text-isola-teal'>「沖縄黒糖ラテ」</strong>がいちおしです。<br>深いコクと優しい甘さが、旅の疲れを癒やしてくれます☕"
+                }
+            ];
+
+            const systemPrompt = `
+                あなたは沖縄のアメリカンビレッジにあるジェラート＆ドーナツ店「ISOLA（イゾラ）」の親切で明るい店員さんです。
+                お客様の「今の気分」（入力内容: ${userInput}）に合わせて、以下のメニューからおすすめを提案してください。
+                沖縄の素材へのこだわりや、ビーチ、海といった沖縄のシチュエーションを交えて、フレンドリーに返答してください。
+
+                【メニューリスト】
+                - ジェラート：MA-SU MILK（まーすミルク）、RASPBERRY GUAVA（ラズベリーグアバ/ヴィーガン）、PISTACHIO（ピスタチオ）
+                - ドーナツ：CHOCOLATE（チョコレート）、WHITE GLAZE（ホワイトグレーズ）、BOMBOLONI（ボンボローニ/カスタードクリーム）
+                - ドリンク：沖縄黒糖ラテ、濃厚マンゴージュース、さんぴん茶（Sanpin-cha）
+            `;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [{ text: `お客様の気分：${userInput}` }]
+                }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            const maxRetries = 3;
+            let attempt = 0;
+            let success = false;
+
+            while (attempt < maxRetries && !success) {
+                try {
+                    // APIキーが空の場合（ローカル環境など）は即座にエラーとしてフォールバックへ
+                    if (!apiKey && window.location.hostname !== 'localhost' && !window.location.hostname.includes('googleusercontent')) {
+                         // 特定の環境以外でキーがない場合はスキップ
+                    }
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (aiText) {
+                        responseText.innerHTML = aiText.replace(/\n/g, '<br>');
+                        success = true;
+                    } else {
+                        throw new Error("No response text");
+                    }
+
+                } catch (error) {
+                    attempt++;
+                    console.error(`Attempt ${attempt} failed:`, error);
+                    
+                    if (attempt === maxRetries) {
+                        // ▼▼▼ 強化された確実な回答ロジック (Fallback) ▼▼▼
+                        console.log("Switching to enhanced local rules.");
+                        let matchedRule = null;
+                        const lowerInput = userInput.toLowerCase();
+
+                        // ルールを上から順にチェック
+                        for (const rule of localRules) {
+                            if (rule.keywords.some(keyword => lowerInput.includes(keyword))) {
+                                matchedRule = rule;
+                                break;
+                            }
+                        }
+
+                        if (matchedRule) {
+                            responseText.innerHTML = matchedRule.message;
+                        } else {
+                            // どのキーワードにも当てはまらない場合のデフォルト回答
+                            responseText.innerHTML = "迷ってしまいますよね！<br>今の時間帯なら、<strong class='text-isola-teal'>「沖縄黒糖ラテ」</strong>片手に海辺を散歩するのはいかがですか？<br>ジェラートとドーナツの組み合わせも罪深い美味しさですよ😊<br>（今の気分を「甘い」「さっぱり」などで教えてくれると、もっと詳しく提案できます！）";
+                        }
+                        success = true;
+                    } else {
+                        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt - 1)));
+                    }
+                }
+            }
+
+            btn.innerHTML = '<span>ASK AI</span> <i class="fas fa-magic"></i>';
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>
